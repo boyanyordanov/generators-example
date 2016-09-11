@@ -58,4 +58,47 @@ class MakeGenerator extends GeneratorCommand
     {
         return $rootNamespace . '\Console\Commands\Generators';
     }
+
+    protected function buildClass($name)
+    {
+        $result = parent::buildClass($name);
+
+        $this->replaceSignature($result, $name);
+
+        $this->replaceStubFileName($result, $name);
+
+        return $result;
+    }
+
+    private function replaceSignature(&$result, $name)
+    {
+        $classNameParts = $this->getBaseClassNameAsArray($name);
+
+        $normalisedName = implode('-', $classNameParts);
+
+        $result = str_replace('DummySignature', 'make:' . $normalisedName, $result);
+
+        return $this;
+    }
+
+    private function replaceStubFileName(&$result, $name)
+    {
+        $classNameParts = $this->getBaseClassNameAsArray($name);
+
+        $result = str_replace('DummyStub', studly_case(implode('-', $classNameParts)), $result);
+
+        return $this;
+    }
+
+    /**
+     * @param $name
+     * @return array
+     */
+    private function getBaseClassNameAsArray($name)
+    {
+        $classNameParts = explode('_', snake_case(class_basename($name)));
+
+        array_pop($classNameParts);
+        return $classNameParts;
+    }
 }
