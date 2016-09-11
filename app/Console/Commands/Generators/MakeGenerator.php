@@ -67,7 +67,7 @@ class MakeGenerator extends GeneratorCommand
 
         $this->replaceSignature($result, $name);
 
-        $this->replaceStubFileName($result, $name);
+        $this->replaceGeneratedClassName($result, $name);
 
         return $result;
     }
@@ -83,11 +83,11 @@ class MakeGenerator extends GeneratorCommand
         return $this;
     }
 
-    private function replaceStubFileName(&$result, $name)
+    private function replaceGeneratedClassName(&$result, $name)
     {
         $classNameParts = $this->getBaseClassNameAsArray($name);
 
-        $result = str_replace('DummyStub', studly_case(implode('-', $classNameParts)), $result);
+        $result = str_replace('DummyGeneratedClassName', studly_case(implode('-', $classNameParts)), $result);
 
         return $this;
     }
@@ -128,5 +128,7 @@ class DummyClass {
 STUB;
 
         $this->files->put($stubPath, $stub);
+
+        $this->info('Generator file stub created successfully!');
     }
 }
