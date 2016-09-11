@@ -1,21 +1,18 @@
 <?php
 
-namespace App\Console\Commands\Generators;
+namespace DummyNamespace;
 
 use Illuminate\Console\GeneratorCommand;
-use Illuminate\Filesystem\Filesystem;
+use Illuminate\Contracts\Filesystem\Filesystem;
 
-class MakeGenerator extends GeneratorCommand
+class DummyClass extends GeneratorCommand
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $name = 'make:generator';
-
-
-    protected $type = 'Generator';
+    protected $name = 'DummySignature';
 
     /**
      * The console command description.
@@ -51,7 +48,7 @@ class MakeGenerator extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/stubs/GeneratorCommand.stub';
+        return __DIR__ . '/stubs/DummyStub.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace)
