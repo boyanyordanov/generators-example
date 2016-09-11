@@ -4,6 +4,7 @@ namespace App\Console\Commands\Generators;
 
 use Illuminate\Console\GeneratorCommand;
 use Illuminate\Filesystem\Filesystem;
+use Symfony\Component\VarDumper\Cloner\Stub;
 
 class MakeGenerator extends GeneratorCommand
 {
@@ -42,6 +43,7 @@ class MakeGenerator extends GeneratorCommand
     public function fire()
     {
         parent::fire();
+        $this->createStubFile($this->parseName($this->getNameInput()));
     }
 
     /**
@@ -100,5 +102,31 @@ class MakeGenerator extends GeneratorCommand
 
         array_pop($classNameParts);
         return $classNameParts;
+    }
+
+    private function createStubFile($name)
+    {
+        $classNameParts = $this->getBaseClassNameAsArray($name);
+
+        $result = studly_case(implode('-', $classNameParts));
+
+        $stubPath = __DIR__ . '/stubs/' . $result . '.stub';
+
+        if($this->files->exists($stubPath)) {
+            $this->error('The stub for the Generator already exists!');
+            return;
+        }
+
+        $stub = <<<'STUB'
+<?php
+
+namespace DummyNamespace;
+
+class DummyClass {
+
+}
+STUB;
+
+        $this->files->put($stubPath, $stub);
     }
 }
